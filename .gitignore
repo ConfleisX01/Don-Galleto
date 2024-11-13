@@ -1,0 +1,42 @@
+# Ignorar archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Ignorar dependencias de Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar directorios de compilación de frontend y backend
+dist/
+build/
+
+# Ignorar logs
+logs/
+*.log
+*.log.*
+
+# Ignorar archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de configuración de IDEs
+.vscode/
+.idea/
+*.swp
+
+# Ignorar archivos de caché
+.cache/
+.parcel-cache/
+
+# Ignorar salidas de tests
+coverage/
+*.lcov
+test-output/
+
+# Ignorar archivos específicos de Mac y Windows
+Desktop.ini
+.Spotlight-V100
+.Trashes
