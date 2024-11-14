@@ -2,7 +2,7 @@ import { FaBell } from "react-icons/fa";
 
 export default function Navbar({ title }) {
     return (
-        <div className="navbar p-0">
+        <div className="navbar">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
