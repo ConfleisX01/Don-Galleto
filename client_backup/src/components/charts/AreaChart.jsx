@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ApexCharts from "apexcharts";
 
-const AreaChart = ({ title, series, categories }) => {
+const AreaChart = ({ title, data, categories, label }) => {
     useEffect(() => {
         const options = {
             chart: {
@@ -48,21 +48,13 @@ const AreaChart = ({ title, series, categories }) => {
             },
             series: [
                 {
-                    name: "Ventas",
-                    data: [65, 64, 64, 65, 63, 64],
+                    name: label,
+                    data: data,
                     color: "#1A56DB",
                 },
             ],
             xaxis: {
-                categories: [
-                    "01 February",
-                    "02 February",
-                    "03 February",
-                    "04 February",
-                    "05 February",
-                    "06 February",
-                    "07 February",
-                ],
+                categories: categories,
                 labels: {
                     show: false,
                 },
@@ -91,7 +83,7 @@ const AreaChart = ({ title, series, categories }) => {
             <div className="flex justify-between">
                 <div>
                     <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
-                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Users this week</p>
+                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">{title}</p>
                 </div>
                 <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
                     12%
