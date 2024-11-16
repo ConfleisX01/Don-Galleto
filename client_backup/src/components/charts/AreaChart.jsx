@@ -3,6 +3,12 @@ import ApexCharts from "apexcharts";
 
 const AreaChart = ({ title, data, categories, label }) => {
     useEffect(() => {
+        const total = () => {
+            data.forEach(element => {
+                return element = + element
+            });
+        }
+
         const options = {
             chart: {
                 height: "80%",

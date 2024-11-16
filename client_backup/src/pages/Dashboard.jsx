@@ -1,7 +1,7 @@
 import AreaChart from "../components/charts/AreaChart";
 import BarChart from "../components/charts/BarChart";
-import TrafficCard from "../components/charts/DonutChart";
 import Navbar from "../components/dashboard/Navbar";
+import DonutChart from '../components/charts/DonutChart'
 
 import { toast } from 'react-toastify'
 
@@ -15,7 +15,7 @@ export default function Dashboard() {
                     <div className="w-full">
                         <Navbar title={'Notificaciones'} />
                         <div>
-                            <TrafficCard
+                            <DonutChart
                                 title={'Mermas'}
                                 series={[220, 100, 500, 700]}
                                 labels={["Desperdicio", "Material Quemado", "Material en producción", "Material Caduco"]}
