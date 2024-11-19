@@ -7,6 +7,8 @@ import {
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
+import Production from "./pages/Production";
+import Mermas from "./pages/Mermas";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +27,14 @@ function App() {
         {
           path: '/system/dashboard',
           element: <Dashboard />
+        },
+        {
+          path: '/system/production',
+          element: <Production />
+        },
+        {
+          path: '/system/Mermas',
+          element: <Mermas />
         }
       ]
     }
