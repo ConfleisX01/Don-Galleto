@@ -1,37 +1,40 @@
 import AreaChart from "../components/charts/AreaChart";
 import BarChart from "../components/charts/BarChart";
-import Navbar from "../components/dashboard/Navbar";
-import DonutChart from '../components/charts/DonutChart'
+import Navbar, { ItemNav } from "../components/dashboard/Navbar";
 
 import { toast } from 'react-toastify'
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import RadialChart from "../components/charts/RadialChart";
+import DonutChart from "../components/charts/DonutChart";
+import MaterialStats from "../components/Stat/MaterialStats";
 
-const menu = [
+const materials = [
     {
-        label: 'Caducidad',
-        isSelected: true
+        material: 'Harina',
+        quantity: '2',
+        date: '25/12/2024'
     },
     {
-        label: 'Stock',
-        isSelected: false
+        material: 'C. Chocolate',
+        quantity: '1',
+        date: '25/12/2024'
     },
     {
-        label: 'Mermas',
-        isSelected: false
+        material: 'Levadura',
+        quantity: '0.5',
+        date: '25/12/2024'
     },
     {
-        label: 'Prioritarias',
-        isSelected: false
+        material: 'Vainilla',
+        quantity: '2',
+        date: '25/12/2024'
     }
 ]
 
 export default function Dashboard() {
-    const [sectionSelected, setSectionSelected] = useState([])
-    const notify = () => toast.success("Wow so easy!");
+    const [sectionSelected, setSectionSelected] = useState('Mermas')
 
-    useEffect(() => {
-        console.log(sectionSelected)
-    }, [sectionSelected])
+    const notify = () => toast.success("Wow so easy!");
 
     return (
         <>
@@ -40,44 +43,38 @@ export default function Dashboard() {
                     <div className="w-full">
                         <Navbar
                             title={'Notificaciones'}
-                            sections={menu}
-                            sectionSelected={setSectionSelected}
-                        />
-                        <div>
+                        >
                             {
-                                sectionSelected.length === 0 ? (
-                                    <DonutChart
-                                        title={'Caducidad'}
-                                        series={[220, 100, 500, 700]}
-                                        labels={["Desperdicio", "Material Quemado", "Material en producción", "Material Caduco"]}
-                                        label={'Material Desperdiciado'}
-                                    />
-                                ) : sectionSelected[0]?.isSelected ? (
-                                    <DonutChart
-                                        title={'Caducidad'}
-                                        series={[220, 100, 500, 700]}
-                                        labels={["Desperdicio", "Material Quemado", "Material en producción", "Material Caduco"]}
-                                        label={'Material Desperdiciado'}
-                                    />
-                                ) : sectionSelected[1]?.isSelected ? (
-                                    <AreaChart
-                                        title={'Stock'}
-                                        categories={["01 February", "02 February", "03 February", "04 February", "05 February", "06 February", "07 February",]}
-                                        data={[10, 20, 30, 40, 50]}
-                                        label={'Ventas'}
-                                    />
-                                ) : sectionSelected[2]?.isSelected ? (
-                                    <BarChart />
-                                ) : sectionSelected[3]?.isSelected ? (
-                                    <DonutChart
-                                        title={'Prioritarias'}
-                                        series={[220, 100, 500, 700]}
-                                        labels={["Desperdicio", "Material Quemado", "Material en producción", "Material Caduco"]}
-                                        label={'Material Desperdiciado'}
-                                    />
-                                ) : (
-                                    <p>No chart selected</p>
+                                ['Caducidad', 'Stock', 'Mermas', 'Prioritarias'].map(
+                                    (label) => {
+                                        return <ItemNav
+                                            key={label}
+                                            label={label}
+                                            isSelected={sectionSelected === label}
+                                            onClick={() => setSectionSelected(label)}
+                                        />
+                                    }
                                 )
+                            }
+                        </Navbar>
+                        <div className="flex justify-center">
+                            {
+                                sectionSelected === 'Caducidad' ? (
+                                    <div className="stats shadow">
+                                        {
+                                        }
+                                    </div>
+                                ) : sectionSelected === 'Stock' ? (
+                                    <RadialChart />
+                                ) : sectionSelected === 'Mermas' ? (
+                                    <DonutChart
+                                        label={'Material Desperdiciado'}
+                                        labels={['Quemado', 'Produccion', 'Desperdicio']}
+                                        series={[40, 20, 35]}
+                                    />
+                                ) : sectionSelected === 'Prioritarias' ? (
+                                    <p>hola</p>
+                                ) : (<p>No se selecciono el chart</p>)
                             }
                         </div>
                     </div>
@@ -101,5 +98,5 @@ export default function Dashboard() {
                 </div>
             </div>
         </>
-    );
+    )
 }

@@ -1,19 +1,7 @@
 import { useState } from "react";
 import { FaBell } from "react-icons/fa";
 
-export default function Navbar({ title, sections, sectionSelected }) {
-    const [sectionsItems, setSectionsItems] = useState(sections)
-
-    const selectSection = (item) => {
-        const updatedSection = sectionsItems.map((section) =>
-            section.label === item.label ?
-                { ...section, isSelected: true }
-                : { ...section, isSelected: false }
-        )
-        sectionSelected(updatedSection)
-        setSectionsItems(updatedSection)
-    }
-
+export default function Navbar({ title, children }) {
     return (
         <div className="navbar">
             <div className="navbar-start">
@@ -35,15 +23,9 @@ export default function Navbar({ title, sections, sectionSelected }) {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                        <li><a>Item 1</a></li>
-                        <li>
-                            <a>Parent</a>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a>Item 3</a></li>
+                        {
+                            children
+                        }
                     </ul>
                 </div>
                 <a className="text-2xl font-medium">{title}</a>
@@ -51,9 +33,7 @@ export default function Navbar({ title, sections, sectionSelected }) {
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 gap-x-4">
                     {
-                        sectionsItems.map((item, index) => {
-                            return <li onClick={() => selectSection(item)} key={index} className={item.isSelected ? 'bg-blue-600 text-white rounded-lg' : ''}><a>{item.label}</a></li>
-                        })
+                        children
                     }
                 </ul>
             </div>
@@ -61,5 +41,11 @@ export default function Navbar({ title, sections, sectionSelected }) {
                 <a className="btn btn-ghost"><FaBell /></a>
             </div>
         </div>
+    )
+}
+
+export function ItemNav({ label, isSelected, onClick }) {
+    return (
+        <li><a onClick={onClick} className={isSelected ? 'bg-blue-600 rounded-md text-white' : ''}>{label}</a></li>
     )
 }
