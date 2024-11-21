@@ -7,6 +7,7 @@ import {
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
+import Pos from "./pages/POS";
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
@@ -28,6 +29,10 @@ function App() {
         {
           path: '/system/dashboard',
           element: <Dashboard />
+        },
+        {
+          path: '/system/sales',
+          element: <Pos />
         }
       ]
     }
