@@ -9,6 +9,9 @@ import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
 import Pos from "./pages/POS";
 
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -38,6 +41,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <ToastContainer />
     </>
   )
 }

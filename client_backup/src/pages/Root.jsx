@@ -5,7 +5,7 @@ import { MdAttachMoney } from "react-icons/md"
 import { BsBoxSeam } from "react-icons/bs"
 import { GoChecklist } from "react-icons/go"
 import { GiGearHammer } from "react-icons/gi"
-import { Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 
 export default function Root() {
     return (
@@ -15,32 +15,33 @@ export default function Root() {
                     <Menu>
                         <MenuItem
                             icon={<IoHomeOutline />}
-                            navigation={'dashboard'}
+                            navigation={'/system/dashboard'}
                             label={'Dashboard'}
                         />
                         <MenuItem
                             icon={<MdAttachMoney />}
-                            navigation={'sales'}
+                            navigation={'/system/sales'}
                             label={'Ventas'}
                         />
                         <MenuItem
                             icon={<BsBoxSeam />}
-                            navigation={'inventory'}
+                            navigation={'/system/inventory'}
                             label={'Inventario'}
                         />
                         <MenuItem
                             icon={<GoChecklist />}
-                            navigation={'reports'}
+                            navigation={'/system/reports'}
                             label={'Reportes'}
                         />
                         <MenuItem
                             icon={<GiGearHammer />}
-                            navigation={'production'}
+                            navigation={'/system/production'}
                             label={'Producción'}
                         />
                     </Menu>
                 </div>
                 <div className="grow overflow-y-scroll p-2">
+                    <Navigate to={'/system/dashboard'} />
                     <Outlet />
                 </div>
             </div>
