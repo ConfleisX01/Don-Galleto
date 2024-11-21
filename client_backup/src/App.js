@@ -7,6 +7,7 @@ import {
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
+import Pos from "./pages/POS";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +26,10 @@ function App() {
         {
           path: '/system/dashboard',
           element: <Dashboard />
+        },
+        {
+          path: '/system/sales',
+          element: <Pos />
         }
       ]
     }

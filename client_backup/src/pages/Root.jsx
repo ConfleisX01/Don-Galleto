@@ -15,27 +15,27 @@ export default function Root() {
                     <Menu>
                         <MenuItem
                             icon={<IoHomeOutline />}
-                            navigation={'system/dashboard'}
+                            navigation={'dashboard'}
                             label={'Dashboard'}
                         />
                         <MenuItem
                             icon={<MdAttachMoney />}
-                            navigation={'system/sales'}
+                            navigation={'sales'}
                             label={'Ventas'}
                         />
                         <MenuItem
                             icon={<BsBoxSeam />}
-                            navigation={'system/inventory'}
+                            navigation={'inventory'}
                             label={'Inventario'}
                         />
                         <MenuItem
                             icon={<GoChecklist />}
-                            navigation={'system/reports'}
+                            navigation={'reports'}
                             label={'Reportes'}
                         />
                         <MenuItem
                             icon={<GiGearHammer />}
-                            navigation={'system/production'}
+                            navigation={'production'}
                             label={'Producción'}
                         />
                     </Menu>

@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "daisyui": "^4.12.14"
+  },
+  "dependencies": {
+    "flowbite-react": "^0.10.2"
+  }
+}
