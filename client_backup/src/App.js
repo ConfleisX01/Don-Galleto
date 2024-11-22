@@ -8,7 +8,10 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
 import Report from "./pages/Report";
+import Pos from "./pages/POS";
 
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const router = createBrowserRouter([
@@ -31,16 +34,21 @@ function App() {
         {
           path: '/system/report',
           element: <Report />
+        },
+        {
+          path: '/system/sales',
+          element: <Pos />
         }
       ]
     }
-  ])
+  ]);
 
   return (
     <>
       <RouterProvider router={router} />
+      <ToastContainer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
