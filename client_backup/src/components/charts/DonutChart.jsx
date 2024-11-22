@@ -26,7 +26,7 @@ const TrafficCard = ({ title, series, labels, label }) => {
                                 return sum + 'g';
                             },
                         },
-                        value: { show: true, fontFamily: "Inter, sans-serif", offsetY: -20, formatter: value => value + "k" },
+                        value: { show: true, fontFamily: "Inter, sans-serif", offsetY: -20, formatter: value => value + "g" },
                     },
                     size: "80%",
                 },

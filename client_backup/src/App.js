@@ -7,6 +7,8 @@ import {
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
+import Report from "./pages/Report";
+
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +27,10 @@ function App() {
         {
           path: '/system/dashboard',
           element: <Dashboard />
+        },
+        {
+          path: '/system/report',
+          element: <Report />
         }
       ]
     }

@@ -15,7 +15,7 @@ export default function Root() {
                     <Menu>
                         <MenuItem
                             icon={<IoHomeOutline />}
-                            navigation={'system/dashboard'}
+                            navigation={'/system/dashboard'}
                             label={'Dashboard'}
                         />
                         <MenuItem
@@ -30,7 +30,7 @@ export default function Root() {
                         />
                         <MenuItem
                             icon={<GoChecklist />}
-                            navigation={'system/reports'}
+                            navigation={'/system/report'}
                             label={'Reportes'}
                         />
                         <MenuItem
