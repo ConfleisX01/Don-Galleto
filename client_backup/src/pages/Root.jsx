@@ -8,6 +8,7 @@ import { GiGearHammer } from "react-icons/gi"
 import { Navigate, Outlet } from "react-router-dom"
 
 export default function Root() {
+    console.log('prueba')
     return (
         <>
             <div className="flex w-full h-screen">
@@ -41,7 +42,6 @@ export default function Root() {
                     </Menu>
                 </div>
                 <div className="grow overflow-y-scroll p-2">
-                    <Navigate to={'/system/dashboard'} />
                     <Outlet />
                 </div>
             </div>
