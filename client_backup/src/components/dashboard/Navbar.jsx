@@ -1,6 +1,19 @@
+import { useState } from "react";
 import { FaBell } from "react-icons/fa";
 
-export default function Navbar({ title }) {
+export default function Navbar({ title, sections, sectionSelected }) {
+    const [sectionsItems, setSectionsItems] = useState(sections)
+
+    const selectSection = (item) => {
+        const updatedSection = sectionsItems.map((section) =>
+            section.label === item.label ?
+                { ...section, isSelected: true }
+                : { ...section, isSelected: false }
+        )
+        sectionSelected(updatedSection)
+        setSectionsItems(updatedSection)
+    }
+
     return (
         <div className="navbar">
             <div className="navbar-start">
@@ -36,18 +49,12 @@ export default function Navbar({ title }) {
                 <a className="text-2xl font-medium">{title}</a>
             </div>
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-                    <li><a>Item 1</a></li>
-                    <li>
-                        <details>
-                            <summary>Parent</summary>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </details>
-                    </li>
-                    <li><a>Item 3</a></li>
+                <ul className="menu menu-horizontal px-1 gap-x-4">
+                    {
+                        sectionsItems.map((item, index) => {
+                            return <li onClick={() => selectSection(item)} key={index} className={item.isSelected ? 'bg-blue-600 text-white rounded-lg' : ''}><a>{item.label}</a></li>
+                        })
+                    }
                 </ul>
             </div>
             <div className="navbar-end">

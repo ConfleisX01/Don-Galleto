@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ApexCharts from 'apexcharts';
 
-const TrafficCard = ({ title, series, labels, label }) => {
+const DonutChart = ({ title, series, labels, label }) => {
     const [options, setOptions] = useState({
         series: series,
         colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694"],
@@ -35,9 +35,9 @@ const TrafficCard = ({ title, series, labels, label }) => {
         labels: labels,
         dataLabels: { enabled: false },
         legend: { position: "bottom", fontFamily: "Inter, sans-serif" },
-        yaxis: { labels: { formatter: value => value + "k" } },
+        yaxis: { labels: { formatter: value => value + "g" } },
         xaxis: {
-            labels: { formatter: value => value + "k" },
+            labels: { formatter: value => value + "g" },
             axisTicks: { show: false },
             axisBorder: { show: false },
         },
@@ -65,4 +65,4 @@ const TrafficCard = ({ title, series, labels, label }) => {
     );
 };
 
-export default TrafficCard;
+export default DonutChart;
