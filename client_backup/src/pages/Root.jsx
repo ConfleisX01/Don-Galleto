@@ -41,7 +41,6 @@ export default function Root() {
                     </Menu>
                 </div>
                 <div className="grow overflow-y-scroll p-2">
-                    <Navigate to={'/system/dashboard'} />
                     <Outlet />
                 </div>
             </div>
