@@ -1,7 +1,23 @@
 import { FaBox } from "react-icons/fa";
 import { FaTruck } from "react-icons/fa";
 
+import axios from 'axios'
+import { useState } from "react";
+import { materials } from "../components/config/materials";
+
 export default function GetMaterials() {
+    const [itemSelected, setItemSelected] = useState('')
+
+    const getAllMaterials = () => {
+        axios.get('URL')
+            .then(function (response) {
+
+            })
+            .catch(function (error) {
+
+            })
+    }
+
     return (
         <>
             <div>
@@ -24,11 +40,11 @@ export default function GetMaterials() {
                                 </div>
                                 <select className="select select-bordered">
                                     <option disabled selected>Selecciona uno</option>
-                                    <option>Star Wars</option>
-                                    <option>Harry Potter</option>
-                                    <option>Lord of the Rings</option>
-                                    <option>Planet of the Apes</option>
-                                    <option>Star Trek</option>
+                                    {
+                                        materials.map((material, index) => {
+                                            return <option value={material.name}>{material.name}</option>
+                                        })
+                                    }
                                 </select>
                             </label>
                         </div>
