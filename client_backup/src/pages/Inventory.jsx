@@ -1,5 +1,6 @@
 import { FaBox } from "react-icons/fa";
 import { FaBell } from "react-icons/fa";
+import { RiSearchFill } from "react-icons/ri";
 
 import { useState } from "react";
 import { toast } from 'react-toastify'
@@ -20,7 +21,7 @@ export default function Inventory() {
 
   return (
     <>
-      <div className="w-full py-4">
+      <div className="w-full py-4 px-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {
             data.map((material, index) => {
@@ -35,9 +36,9 @@ export default function Inventory() {
             })
           }
         </div>
-      </div>
-      <div className="w-full">
-        <button className="btn btn-error">Agregar Merma</button>
+        <div className="w-full mt-5">
+          <button className="btn btn-error">Agregar Merma</button>
+        </div>
       </div>
     </>
   )
@@ -61,9 +62,9 @@ function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedo
       <div className={`indicator w-full p-2 py-5 border rounded-lg ${calcularDias() < 0 ? 'bg-gray-100' : ''}`}>
         {
           calcularDias() < 0 ?
-            <span className="indicator-item indicator-center badge bg-red-300"><Link to={'/system/get_materials'} className="font-semibold text-red-600">Pedir Material</Link></span> :
+            <span className="indicator-item indicator-end badge bg-red-300"><Link to={'/system/get_materials'} className="font-semibold text-red-600"><RiSearchFill /></Link></span> :
             calcularDias() < 6 ?
-              <span className="indicator-item indicator-center badge badge-primary"><FaBell /></span> : null
+              <span className="indicator-item indicator-end badge badge-warning"><FaBell /></span> : null
         }
         <div className="flex w-full">
           <div className={calcularDias() < 0 ? 'hidden' : 'flex flex-col'}>
