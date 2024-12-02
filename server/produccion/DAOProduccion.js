@@ -14,7 +14,7 @@ export async function getAllOrdenes() {
     });
 }
 
-
+//inicar órdenes de producción
 export async function iniciarProcesoDAO(ordenId) {
     return new Promise((resolve, reject) => {
         // Ejecuta el procedimiento almacenado primero
@@ -54,4 +54,45 @@ export async function iniciarProcesoDAO(ordenId) {
             }
         });
     });
+}
+
+//DAO para avanzar de estatus
+export async function nextStep(numOrden) {
+    return new Promise((resolve, reject) => {
+        db.query('call galleto.avanzar_estatus_orden(?);', [numOrden], (error, results) => {
+            if (error){
+                console.log(error);
+                reject({
+                    success: false,
+                    message: 'Hubo un problema con la base de datos'
+                });
+            }else{
+                resolve({
+                    success: true,
+                    message: 'Se avanzo al siguiente paso exitosamente'
+                });
+            }
+        });
+    })
+}
+
+export async function marcarMerma(data) {
+    const numOrden = data.data.numOrden;
+    const razon = data.data.razon;
+    return new Promise((resolve, reject) =>{
+        db.query('call galleto.marcar_merma(?, ?);', [numOrden, razon], (error, results) =>{
+            if(error){
+                console.log(error);
+                reject({
+                    success: false,
+                    message: 'ocurrio un error al enviar los ingredientes a mermas.'
+                })
+            }else{
+                resolve({
+                    success: true,
+                    message: 'se enviaroon los ingreientes a mermas'
+                })
+            }
+        })
+    })
 }
