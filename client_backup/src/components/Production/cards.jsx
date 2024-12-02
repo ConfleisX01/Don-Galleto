@@ -1,8 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { initProcedure, nextStepOrden, marcarMerma } from '../apiHandllerProduccion/APIProducion';
 
-export default function CardProduction({ priority }) {
-    // Estado para el paso actual
-    const [currentStep, setCurrentStep] = useState(0);
+export default function CardProduction({ priority, numOrden, name, text, step, onUpdate  }) {
+
+    const [currentStep, setCurrentStep] = useState(step);
+
+    useEffect(() => {}, [currentStep]);
+
+    const handleNextStep = async () => {
+        if (currentStep === 0) {
+            const response = await initProcedure(numOrden);
+            if (response.success) {
+                alert(response.message);
+                setCurrentStep(currentStep +1);
+                onUpdate?.();
+                return;
+            } else if (!response.success) {
+                let mensaje = response.message || "";
+                mensaje = mensaje.replace(/;/g, ';\n');
+                alert(mensaje); 
+                return;
+            }
+        }
+        if (currentStep < 4) {
+            const response = await nextStepOrden(numOrden);
+            if (response.success) {
+                alert(response.message)
+                setCurrentStep(currentStep + 1);
+                onUpdate?.();
+            }else{
+                alert(response.message)
+                return;
+            }
+        }
+    };
+
+    const handleMarcarMerma = async () => {
+        const data ={
+            numOrden: numOrden,
+            razon: step < 3 ? 'error durante la pruduccion' : 'error de durante el proceso de enfriamiento'
+        }
+        const response = await marcarMerma(data);
+        if(response.success){
+            alert(response.message)
+            onUpdate?.();
+        }else{
+            alert(response.message)
+        }
+    }
 
     // Determina el color según la prioridad
     const getColorClass = (priority) => {
@@ -33,21 +78,16 @@ export default function CardProduction({ priority }) {
         }
     };
 
-    // Maneja el cambio de paso
-    const handleNextStep = () => {
-        if (currentStep < 4) setCurrentStep(currentStep + 1,
-            console.log(currentStep)
-        );
-    };
 
     return (
         <div className='m-6'>
             <div className="flex border border-gray-300 rounded-lg shadow">
                 {/* Div con color dinámico */}
-                <div className={`${getColorClass(priority)} rounded-bl-lg px-4 shadow`} ></div>
+                <div className={`${getColorClass(priority)} border border-gray-300 rounded-bl-lg px-4 shadow`} ></div>
 
                 <div>
-                    <h1 className='mx-6 mt-3 mb-2 text-lg font-medium'>No. Orden: 123456</h1>
+                    <h1 className='mx-6 mt-3 mb-2 text-lg font-medium'>No. Orden: {numOrden}</h1>
+                    <h1 className='mx-6 mt-3 mb-2 text-lg font-medium'>{name}</h1>
                     <img
                         className="w-[250px] h-[250px] mx-6 mb-3 p-2 rounded-lg border border-gray-300 shadow object-cover"
                         src="https://es.cravingsjournal.com/wp-content/uploads/2023/06/galletas-de-chocolate-de-leche-y-caramelo-2.jpg"
@@ -61,7 +101,7 @@ export default function CardProduction({ priority }) {
                             {/* Paso 1 */}
                             <li
                                 className={`flex w-full items-center ${currentStep >= 1 ? 'text-green-400' : 'text-gray-300'
-                                    } after:content-['Iniciado'] after:w-full after:h-1 after:border-b  
+                                    } after:content-['Iniciado'] after:w-full after:h-1 after:border-b
                                 ${currentStep >= 1 ? 'after:border-green-400' : 'after:border-gray-100'}
                                  after:border-4 after:inline-block ${currentStep >= 1 ? 'dark:after:border-green-400' : 'dark:after:border-gray-700'
                                     }`}
@@ -92,7 +132,7 @@ export default function CardProduction({ priority }) {
                             {/* Paso 2 */}
                             <li
                                 className={`flex w-full items-center ${currentStep >= 2 ? 'text-green-400' : 'text-gray-300'
-                                    } after:content-['Procesado'] after:w-full after:h-1 after:border-b 
+                                    } after:content-['Procesado'] after:w-full after:h-1 after:border-b
                                     ${currentStep >= 2 ? 'after:border-green-400' : 'after:border-gray-100'} after:border-4 after:inline-block ${currentStep >= 2 ? 'dark:after:border-green-400' : 'dark:after:border-gray-700'
                                     }`}
                             >
@@ -122,7 +162,7 @@ export default function CardProduction({ priority }) {
                             {/* Paso 3 */}
                             <li
                                 className={`flex w-full items-center ${currentStep >= 3 ? 'text-green-400' : 'text-gray-300'
-                                    } after:content-['Enfriando'] after:w-full after:h-1 after:border-b 
+                                    } after:content-['Enfriando'] after:w-full after:h-1 after:border-b
                                     ${currentStep >= 3 ? 'after:border-green-400' : 'after:border-gray-100'} after:border-4 after:inline-block ${currentStep >= 3 ? 'dark:after:border-green-400' : 'dark:after:border-gray-700'
                                     }`}
                             >
@@ -183,10 +223,10 @@ export default function CardProduction({ priority }) {
                     <div className='p-3'>
                         <textarea
                             type="textarea"
-                            className="h-[150px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+                            className="h-[250px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                             placeholder="Detalles de preparación"
                             disabled
-                        />
+                        >{text}</textarea>
                     </div>
                 </div>
 
@@ -222,8 +262,7 @@ export default function CardProduction({ priority }) {
                     {currentStep >= 1 && currentStep <= 3 && (
                         <button
                             className="p-6  text-white font-medium bg-red-500 rounded-lg hover:bg-red-600 flex justify-center items-center"
-                            onClick={() => alert('Marcado como merma')}
-                        >
+                            onClick={handleMarcarMerma}>
                             Marcar como merma
                         </button>
                     )}
