@@ -3,6 +3,7 @@ import { FaBell } from "react-icons/fa";
 
 import { useState } from "react";
 import { toast } from 'react-toastify'
+import { Link, Navigate } from "react-router-dom";
 
 
 export default function Inventory() {
@@ -60,7 +61,7 @@ function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedo
       <div className={`indicator w-full p-2 py-5 border rounded-lg ${calcularDias() < 0 ? 'bg-gray-100' : ''}`}>
         {
           calcularDias() < 0 ?
-            <span className="indicator-item indicator-center badge bg-red-300"><button className="font-semibold text-red-600">Pedir Material</button></span> :
+            <span className="indicator-item indicator-center badge bg-red-300"><Link to={'/system/get_materials'} className="font-semibold text-red-600">Pedir Material</Link></span> :
             calcularDias() < 6 ?
               <span className="indicator-item indicator-center badge badge-primary"><FaBell /></span> : null
         }
