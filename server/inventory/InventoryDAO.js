@@ -11,9 +11,20 @@ export async function getAllMaterialsFromBase(materialName) {
     return new Promise((resolve, reject) => {
         connection.query('SELECT * FROM inventario WHERE nombre_insumo = ?', [materialName], (response, err) => {
             if (err) {
-                reject(err)
+                resolve(err)
             }
-            resolve(response)
+            reject(response)
+        })
+    })
+}
+
+export async function getAllMaterials() {
+    return new Promise((resolve, reject) => {
+        connection.query('SELECT * FROM inventario', (response, err) => {
+            if (err) {
+                resolve(err)
+            }
+            reject(response)
         })
     })
 }
