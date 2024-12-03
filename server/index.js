@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 import { SERVER_PORT } from './config.js'
+import ControllerInventory from './inventory/InventoryController.js'
 
 const app = express()
 
@@ -12,6 +13,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }))
+
+app.use('/inventory', ControllerInventory)
 
 app.listen(SERVER_PORT, () => {
     console.log('http://localhost:' + SERVER_PORT)
