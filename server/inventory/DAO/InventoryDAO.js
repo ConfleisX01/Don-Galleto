@@ -9,20 +9,26 @@ const connection = mysql.createConnection({
 
 export async function getAllMaterialsFromBase(materialName) {
     return new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM inventario WHERE nombre_insumo = ?', [materialName], (response, err) => {
-            if (err) return resolve({ status: 400, data: err })
+        connection.query('SELECT * FROM inventario WHERE nombre_insumo = ?', [materialName], (err, response) => {
+            if (err) {
+                return reject({ status: 400, data: err })
+            }
 
-            reject({ status: 200, data: response })
+            if (response.length === 0) {
+                return resolve({ status: 404, data: 'No se encontraron materiales' })
+            }
+
+            return resolve({ status: 200, data: response });
         })
     })
 }
 
 export async function getAllMaterials() {
     return new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM inventario', (response, err) => {
-            if (err) return resolve({ status: 400, data: err })
+        connection.query('SELECT * FROM inventario', (err, response) => {
+            if (err) return reject({ status: 400, data: err })
 
-            reject({ status: 200, data: response })
+            resolve({ status: 200, data: response })
         })
     })
 }
@@ -31,10 +37,11 @@ export async function getAllMaterials() {
 //! Modificar por un procedure en la base de datos
 export async function askedMaterials(idMaterial, quantity) {
     return new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM inventario WHERE id_insumo = ?', [idMaterial], (response, err) => {
-            const materialQuantity = response.cantidad
+        connection.query('SELECT * FROM inventario WHERE id_insumo = ?', [idMaterial], (err, response) => {
+            console.log(response[0].cantidad)
+            const materialQuantity = response[0].cantidad
 
-            if (err) return resolve({ status: 400, data: err })
+            if (err) return reject({ status: 400, data: err })
 
             if (quantity > materialQuantity) return resolve({ status: 400, data: 'La cantidad del material solicitadad no debe de ser mayor a la cantidad disponible' })
 

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 export async function getMaterialFromApis(materialName, url) {
     try {
@@ -9,4 +9,4 @@ export async function getMaterialFromApis(materialName, url) {
     } catch (error) {
 
     }
-}
+}http://192.168.0.112:4001/inventory/getMaterials
