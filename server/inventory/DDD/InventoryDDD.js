@@ -1,12 +1,22 @@
 import axios from 'axios'
 
-export async function getMaterials(materialName) {
+export async function getMaterialFromApis(materialName, apis) {
     try {
-        const response = await axios.get('http://192.168.1.14:4001/inventory/getExternalMaterials', {
-            params: { materialName }
-        })
-        return response
+        const promises = apis.map((apiUrl) =>
+            axios.get(apiUrl, {
+                params: { materialName },
+            })
+        );
+
+        const responses = await Promise.all(promises)
+
+        return responses.map((response) => response.data)
     } catch (error) {
-        console.error(error)
+        console.error('Error al obtener material de las APIs:', error);
+        return [];
     }
+}
+
+export async function askForMaterials(idMaterial, quiantity) {
+    
 }
