@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllMaterials } from '../DAO/InventoryDAO.js'
+import { getAllMaterials, updateMaterialQuantity } from '../DAO/InventoryDAO.js'
 import { verifyAskForMaterials, verifyGetMaterial } from '../CQRS/InventoryCQRS.js'
 
 const ControllerInventory = express.Router()
@@ -37,6 +37,12 @@ ControllerInventory.post('/askMaterials', async (req, res) => {
 
     try {
         const response = await verifyAskForMaterials(idMaterial, quantity)
+
+        if (response.status === 200) {
+            const inventoryResponse = await updateMaterialQuantity(idMaterial, quantity)
+            res.status(inventoryResponse.status).send(inventoryResponse.data)
+        }
+
         res.status(response.status).send(response.data)
     } catch (error) {
         console.error(error)
