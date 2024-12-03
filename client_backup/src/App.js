@@ -48,7 +48,7 @@ function App() {
           path: '/system/inventory',
           element: <Inventory />,
         },
-          produccion
+        {
           path: '/system/production',
           element: <Production />
         },
