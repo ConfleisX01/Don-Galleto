@@ -70,7 +70,6 @@ function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida }) {
 
     if (calculateDays() < 6)
       return <span className="indicator-item indicator-end badge badge-warning"><IoWarningOutline /></span>
-
   }
 
   return (
