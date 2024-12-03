@@ -8,6 +8,7 @@ import { GiGearHammer } from "react-icons/gi"
 import { Navigate, Outlet } from "react-router-dom"
 
 export default function Root() {
+    console.log('prueba')
     return (
         <>
             <div className="flex w-full h-screen">
@@ -30,7 +31,7 @@ export default function Root() {
                         />
                         <MenuItem
                             icon={<GoChecklist />}
-                            navigation={'/system/reports'}
+                            navigation={'/system/report'}
                             label={'Reportes'}
                         />
                         <MenuItem
