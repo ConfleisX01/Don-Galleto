@@ -7,6 +7,6 @@ export async function getMaterialFromApis(materialName, url) {
         })
         return { status: 200, data: response.data }
     } catch (error) {
-
+        console.error(error)
     }
-}http://192.168.0.112:4001/inventory/getMaterials
+}
