@@ -41,7 +41,7 @@ export default function Production() {
                     <p className="text-red-500 m-10">{error}</p>
                 ) : lista.length > 0 ? (
                     lista
-                        .filter((orden) => orden.estatus != 4) // Filtra las órdenes con estatus 4
+                        .filter((orden) => orden.estatus != 6 && orden.estatus != 5 ) // Filtra las órdenes con estatus 4
                         .map((orden) => (
                             <CardProduction
                                 key={orden.id_orden}
