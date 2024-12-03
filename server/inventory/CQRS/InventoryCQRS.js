@@ -4,11 +4,12 @@ import { getMaterialFromApis } from "../DDD/InventoryDDD.js"
 export async function verifyGetMaterial(materialName, apis) {
     if (!materialName || materialName.lenght < 0) return { status: 404, data: 'El nombre del material no respeta el formato o esta vacio' }
 
+    console.log(materialName)
+
     try {
         const response = await getMaterialFromApis(materialName, apis)
         return response
     } catch (error) {
-        console.error(error)
         return { status: 500, data: 'Error de servidor, Intentelo nuevamente' }
     }
 }

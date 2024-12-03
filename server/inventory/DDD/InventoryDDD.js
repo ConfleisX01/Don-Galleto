@@ -12,7 +12,7 @@ export async function getMaterialFromApis(materialName, apis) {
 
         return responses.map((response) => response.data)
     } catch (error) {
-        console.error('Error al obtener material de las APIs:', error);
+        console.error('Error al obtener material de las APIs');
         return [];
     }
 }

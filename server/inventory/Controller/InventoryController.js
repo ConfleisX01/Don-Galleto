@@ -6,9 +6,9 @@ const ControllerInventory = express.Router()
 
 ControllerInventory.get('/getExternalMaterials', async (req, res) => {
     const apis = [
-        'http://192.168.1.14:4001/inventory/getExternalMaterials',
-        'http://192.168.1.14:4001/inventory/getExternalMaterials',
-        'http://192.168.1.14:4001/inventory/getExternalMaterials',
+        'http://192.168.0.112:4001/inventory/getExternalMaterials',
+        'http://192.168.0.112:4001/inventory/getExternalMaterials',
+        'http://192.168.0.112:4001/inventory/getExternalMaterials'
     ]
 
     const materialName = req.query.material
@@ -17,7 +17,6 @@ ControllerInventory.get('/getExternalMaterials', async (req, res) => {
         const response = await verifyGetMaterial(materialName, apis)
         res.status(response.status).send(response.data)
     } catch (error) {
-        console.error(error)
         res.status(500).send('Error de servidor, intentelo nuevamente')
     }
 })
