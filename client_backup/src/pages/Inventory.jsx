@@ -1,8 +1,13 @@
 import { FaBox } from "react-icons/fa";
 import { FaBell } from "react-icons/fa";
+<<<<<<< HEAD
+=======
+import { RiSearchFill } from "react-icons/ri";
+>>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
 
 import { useState } from "react";
 import { toast } from 'react-toastify'
+import { Link, Navigate } from "react-router-dom";
 
 
 export default function Inventory() {
@@ -19,7 +24,11 @@ export default function Inventory() {
 
   return (
     <>
+<<<<<<< HEAD
       <div className="w-full py-4">
+=======
+      <div className="w-full py-4 px-6">
+>>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {
             data.map((material, index) => {
@@ -33,11 +42,19 @@ export default function Inventory() {
               />
             })
           }
+<<<<<<< HEAD
         </div>
       </div>
       <div className="w-full">
         <button className="btn btn-error">Agregar Merma</button>
       </div>
+=======
+        </div>
+        <div className="w-full mt-5">
+          <button className="btn btn-error">Agregar Merma</button>
+        </div>
+      </div>
+>>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
     </>
   )
 }
@@ -60,9 +77,15 @@ function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedo
       <div className={`indicator w-full p-2 py-5 border rounded-lg ${calcularDias() < 0 ? 'bg-gray-100' : ''}`}>
         {
           calcularDias() < 0 ?
+<<<<<<< HEAD
             <span className="indicator-item indicator-center badge bg-red-300"><button className="font-semibold text-red-600">Pedir Material</button></span> :
             calcularDias() < 6 ?
               <span className="indicator-item indicator-center badge badge-primary"><FaBell /></span> : null
+=======
+            <span className="indicator-item indicator-end badge bg-red-300"><Link to={'/system/get_materials'} className="font-semibold text-red-600"><RiSearchFill /></Link></span> :
+            calcularDias() < 6 ?
+              <span className="indicator-item indicator-end badge badge-warning"><FaBell /></span> : null
+>>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
         }
         <div className="flex w-full">
           <div className={calcularDias() < 0 ? 'hidden' : 'flex flex-col'}>
