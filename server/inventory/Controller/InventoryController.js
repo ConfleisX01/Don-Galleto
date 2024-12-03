@@ -1,20 +1,32 @@
 import express from 'express'
-import { getAllMaterials, updateMaterialQuantity } from '../DAO/InventoryDAO.js'
+import { getAllMaterials, getAllMaterialsFromBase, updateMaterialQuantity } from '../DAO/InventoryDAO.js'
 import { verifyAskForMaterials, verifyGetMaterial } from '../CQRS/InventoryCQRS.js'
 
 const ControllerInventory = express.Router()
 
 ControllerInventory.get('/getExternalMaterials', async (req, res) => {
     const apis = [
-        'http://192.168.1.14:4001/inventory/getExternalMaterials',
-        'http://192.168.1.14:4001/inventory/getExternalMaterials',
-        'http://192.168.1.14:4001/inventory/getExternalMaterials',
+        'http://192.168.1.14:4001/inventory/getMaterialsFromBase',
+        'http://192.168.1.14:4001/inventory/getMaterialsFromBase',
+        'http://192.168.1.14:4001/inventory/getMaterialsFromBase',
     ]
 
     const materialName = req.query.material
 
     try {
         const response = await verifyGetMaterial(materialName, apis)
+        res.status(response.status).send(response.data)
+    } catch (error) {
+        console.error(error)
+        res.status(500).send('Error de servidor, intentelo nuevamente')
+    }
+})
+
+ControllerInventory.get('/getMaterialsFromBase', async (req, res) => {
+    const materialName = req.query.material
+
+    try {
+        const response = await getAllMaterialsFromBase(materialName)
         res.status(response.status).send(response.data)
     } catch (error) {
         console.error(error)
