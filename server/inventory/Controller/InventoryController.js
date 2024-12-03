@@ -7,10 +7,8 @@ const ControllerInventory = express.Router()
 ControllerInventory.get('/getExternalMaterials', async (req, res) => {
     const materialName = req.query.material
 
-    res.send(materialName)
-
     try {
-        const response = await verifyGetMaterial('Leche')
+        const response = await verifyGetMaterial(materialName)
         res.status(response.status).send(response.data)
     } catch (error) {
         console.error(error)
