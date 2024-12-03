@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaBell } from "react-icons/fa";
 
+
 export default function Navbar({ title, children }) {
     return (
         <div className="navbar">
@@ -33,7 +34,10 @@ export default function Navbar({ title, children }) {
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 gap-x-4">
                     {
-                        children
+                        sectionsItems.map((item, index) => {
+                            return <li onClick={() => selectSection(item)} key={index} className={item.isSelected ? 'bg-blue-600 text-white rounded-lg' : ''}><a>{item.label}</a></li>
+                        })
+
                     }
                 </ul>
             </div>
