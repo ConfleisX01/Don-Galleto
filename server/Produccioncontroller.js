@@ -1,6 +1,8 @@
 import express, { response } from 'express'
-import { getAllOrdenes } from './DAO/DAOProduccion.js'
-import { verifiProcedure, verifyNextStep, verifyMerma } from './CQRS/CQRSProduccion.js'
+import { getAllOrdenes } from './produccion/DAO/DAOProduccion.js'
+import { verifiProcedure, verifyNextStep, verifyMerma } from './produccion/CQRS/CQRSProduccion.js'
+import { getAllInventario } from './Inventario/DAOInventario.js';
+import { toPublic  } from './Inventario/MVVM/MVVMInventario.js';
 const produccionController = express.Router()
 
 //Obtener lista de ordenes
@@ -85,6 +87,18 @@ produccionController.post('/marcar-merma', async (req, res) =>{
             success: false,
             message: 'Error en el servidor'
         })
+    }
+});
+
+
+produccionController.get('/inventarioPublico', async (req, res) =>{
+    try{
+        const result = await getAllInventario();
+        const lista = await toPublic(result);
+        res.send(lista)
+    }catch(error){
+        console.log(error);
+        res.status(500).send('error en la base de datos');
     }
 });
 

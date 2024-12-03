@@ -1,4 +1,4 @@
-import { db } from '../config.js';  // Correcto para exportaciones nombradas
+import { db } from '../../config.js';  // Correcto para exportaciones nombradas
 
 // Obtener órdenes de producción
 export async function getAllOrdenes() {
