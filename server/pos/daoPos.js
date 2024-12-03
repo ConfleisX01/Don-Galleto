@@ -21,6 +21,20 @@ export function getAllSales() {
     })
 }
 
+export function getAllCookies() {
+    return new Promise((resolve, reject)=>{
+        db.query('SELECT * FROM galletas',
+            (err, result) => {
+                if (err){
+                    reject(err)
+                }else{
+                    resolve(result)
+                }
+            }
+        )
+    })
+}
+
 export function insertSale() {
     return new Promise((resolve, reject) => {
         db.query(
