@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Pos() {
+    const [total, setTotal] = useState(0)
     const [isModalOpenGramos, setIsModalOpenGramos] = useState(false);
     const [isModalOpenDinero, setIsModalOpenDinero] = useState(false);
     const [isModalOpenUnidad, setIsModalOpenUnidad] = useState(false);
@@ -15,11 +16,16 @@ export default function Pos() {
     const [selectedCookie, setSelectedCookie] = useState(null);
     const [cantidad, setCantidad] = useState('');
     const [cart, setCart] = useState([]);
-    let total = 0;
     let i = 0;
     const addToCart = (cookieData) => {
         setCart(prevCart => [...prevCart, cookieData]);
     };
+
+    useEffect(() => {
+        console.log(cart)
+        sumarCantidad()
+    }, [cart])
+
     const showModalSaleGramos = async () => {
         await getAllCookies();
         setIsModalOpenGramos(!isModalOpenGramos);
@@ -44,6 +50,22 @@ export default function Pos() {
     };
     const deleteCart = () => {
         setCart([]);
+    };
+
+    const sumarCantidad = () => {
+        let newTotal = 0;
+        cart.forEach(item => {
+            if (item.type === "g") {
+                newTotal += item.cookiePrice * (item.cantidad / 37);
+            } else if (item.type === "d") {
+                newTotal += parseFloat(item.cantidad);
+            } else if (item.type === "p") {
+                newTotal += 1000 * (item.cantidad / 37);
+            } else if (item.type === "u") {
+                newTotal += parseInt(item.cantidad * item.cookiePrice);
+            }
+        });
+        setTotal(newTotal);
     };
 
     const getAllCookies = async () => {
@@ -108,9 +130,9 @@ export default function Pos() {
                     <div className="border rounded-xl flex flex-col">
                         <div className="grow">
                             <div className="mb-8 overflow-y-auto" style={{ height: "75vh" }}>
-                                {cart.map((cookie) => (
+                                {cart.map((cookie, index) => (
                                     <CardCookie
-                                        key={i++}
+                                        key={index}
                                         typeCookie={cookie.cookieName}
                                         cantidadCookie={cookie.cantidad}
                                         priceTotal={cookie.type === "g" ? "g" : cookie.type === "p" ? "Paq" : cookie.type === "d" ? "$" : cookie.type === "u" ? "pzas" : ""}
@@ -131,9 +153,6 @@ export default function Pos() {
                             </div>
                             <div className="p-2 flex-1 items-center flex flex-col">
                                 <p>Total:
-                                    {cart.map((cookie => {
-                                        total += cookie.cookiePrice * cookie.cantidad;
-                                    }))}
                                     {total}
                                 </p>
                                 <div className="flex aling-center items-center btn btn-primary my-3">
