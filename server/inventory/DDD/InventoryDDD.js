@@ -1,22 +1,12 @@
 import axios from 'axios'
 
-export async function getMaterialFromApis(materialName, apis) {
+export async function getMaterialFromApis(materialName, url) {
     try {
-        const promises = apis.map((apiUrl) =>
-            axios.get(apiUrl, {
-                params: { materialName },
-            })
-        );
-
-        const responses = await Promise.all(promises)
-
-        return responses.map((response) => response.data)
+        const response = await axios.get(url, {
+            params: { material: materialName }
+        })
+        return { status: 200, data: response.data }
     } catch (error) {
-        console.error('Error al obtener material de las APIs:', error);
-        return [];
-    }
-}
 
-export async function askForMaterials(idMaterial, quiantity) {
-    
+    }
 }
