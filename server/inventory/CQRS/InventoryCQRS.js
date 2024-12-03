@@ -2,17 +2,19 @@ import { askedMaterials } from "../DAO/InventoryDAO.js"
 import { getMaterialFromApis } from "../DDD/InventoryDDD.js"
 
 export async function verifyGetMaterial(materialName, apis) {
-    if (!materialName || materialName.lenght < 0) return { status: 404, data: 'El nombre del material no respeta el formato o esta vacio' }
-
-    console.log(materialName)
+    if (!materialName || materialName.length < 1) {
+        return { status: 404, data: 'El nombre del material no respeta el formato o está vacío' }
+    }
 
     try {
         const response = await getMaterialFromApis(materialName, apis)
         return response
     } catch (error) {
-        return { status: 500, data: 'Error de servidor, Intentelo nuevamente' }
+        console.error('Error al obtener materiales:', error);
+        return { status: 500, data: 'Error de servidor, intentelo nuevamente' }
     }
 }
+
 
 export async function verifyAskForMaterials(idMaterial, quantity) {
     if (!idMaterial || idMaterial < 0) return { status: 404, data: 'El id del material no puede estar vacio' }
