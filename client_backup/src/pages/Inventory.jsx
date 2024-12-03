@@ -1,73 +1,63 @@
+
 import { FaBox } from "react-icons/fa";
 import { FaBell } from "react-icons/fa";
-<<<<<<< HEAD
-=======
 import { RiSearchFill } from "react-icons/ri";
->>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from 'react-toastify'
 import { Link, Navigate } from "react-router-dom";
 
+import axios from 'axios'
 
 export default function Inventory() {
-  const [sectionSelected, setSectionSelected] = useState('Mermas')
+  const [materialsData, setMaterialsData] = useState([])
 
-  const data = [
-    { nombre: 'Harina', fecha: '2024-12-02', cantidad: '30', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-    { nombre: 'Azúcar', fecha: '2024-12-20', cantidad: '15', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-    { nombre: 'Sal', fecha: '2024-11-02', cantidad: '20', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-    { nombre: 'Aceite', fecha: '2024-12-08', cantidad: '10', proveedor: 'PROVEEDOR', unidadMedida: 'L' },
-    { nombre: 'Leche', fecha: '2024-11-02', cantidad: '25', proveedor: 'PROVEEDOR', unidadMedida: 'L' },
-    { nombre: 'Café', fecha: '2024-12-02', cantidad: '5', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-  ]
+  const getAllMaterials = () => {
+    axios.get('http://localhost:4001/inventory/getMaterials')
+      .then(function (response) {
+        console.log(response.data)
+        setMaterialsData(response.data)
+      })
+      .catch(function (error) {
+        console.error(error)
+      })
+  }
+
+  useEffect(() => {
+    getAllMaterials()
+  }, [])
 
   return (
     <>
-<<<<<<< HEAD
-      <div className="w-full py-4">
-=======
       <div className="w-full py-4 px-6">
->>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {
-            data.map((material, index) => {
+            materialsData.map((material, index) => {
               return <Card
                 key={index}
-                nombreMaterial={material.nombre}
-                fechaCaducidad={material.fecha}
+                nombreMaterial={material.nombre_insumo}
+                fechaCaducidad={material.caducidad}
                 cantidad={material.cantidad}
-                unidadMedida={material.unidadMedida}
-                proveedor={material.proveedor}
+                unidadMedida={material.unidad}
               />
             })
           }
-<<<<<<< HEAD
-        </div>
-      </div>
-      <div className="w-full">
-        <button className="btn btn-error">Agregar Merma</button>
-      </div>
-=======
         </div>
         <div className="w-full mt-5">
           <button className="btn btn-error">Agregar Merma</button>
         </div>
       </div>
->>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
     </>
   )
 }
 
-function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedor }) {
+function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida }) {
 
   const calcularDias = () => {
     const fechaActual = new Date()
     const nuevaFecha = new Date(fechaCaducidad)
 
     const diferenciaTiempo = nuevaFecha - fechaActual
-
-    console.log(Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24)))
 
     return Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24))
   }
@@ -77,15 +67,9 @@ function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedo
       <div className={`indicator w-full p-2 py-5 border rounded-lg ${calcularDias() < 0 ? 'bg-gray-100' : ''}`}>
         {
           calcularDias() < 0 ?
-<<<<<<< HEAD
-            <span className="indicator-item indicator-center badge bg-red-300"><button className="font-semibold text-red-600">Pedir Material</button></span> :
-            calcularDias() < 6 ?
-              <span className="indicator-item indicator-center badge badge-primary"><FaBell /></span> : null
-=======
             <span className="indicator-item indicator-end badge bg-red-300"><Link to={'/system/get_materials'} className="font-semibold text-red-600"><RiSearchFill /></Link></span> :
             calcularDias() < 6 ?
               <span className="indicator-item indicator-end badge badge-warning"><FaBell /></span> : null
->>>>>>> 4e13aa34a0045c57dd73ca68f11783a87e1f4aa5
         }
         <div className="flex w-full">
           <div className={calcularDias() < 0 ? 'hidden' : 'flex flex-col'}>
