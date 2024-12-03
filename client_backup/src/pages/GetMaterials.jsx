@@ -7,14 +7,19 @@ import { materials } from "../components/config/materials";
 
 export default function GetMaterials() {
     const [itemSelected, setItemSelected] = useState('')
+    const [materialsData, setMaterialsData] = useState([])
+    const [quantityPeticion, setQuantityPeticion] = useState(0)
 
-    const getAllMaterials = () => {
-        axios.get('URL')
+    const searchMaterial = () => {
+        axios.get('http://192.168.1.14:4001/inventory/getExternalMaterials', {
+            params: { material: itemSelected }
+        })
             .then(function (response) {
-
+                console.log(response.data)
+                setMaterialsData(response.data)
             })
             .catch(function (error) {
-
+                console.error(error)
             })
     }
 
@@ -38,11 +43,11 @@ export default function GetMaterials() {
                                     <span className="label-text">Selecciona el material para pedir</span>
                                     <span className="label-text-alt"><FaBox /></span>
                                 </div>
-                                <select className="select select-bordered">
+                                <select value={itemSelected} onChange={(e) => setItemSelected(e.target.value)} className="select select-bordered">
                                     <option disabled selected>Selecciona uno</option>
                                     {
                                         materials.map((material, index) => {
-                                            return <option value={material.name}>{material.name}</option>
+                                            return <option key={index} value={material.name}>{material.name}</option>
                                         })
                                     }
                                 </select>
@@ -51,7 +56,7 @@ export default function GetMaterials() {
 
                         <div>
                             <label htmlFor="password" className="sr-only">Password</label>
-                            <button className="btn btn-primary w-full">Buscar en sucursales</button>
+                            <button className="btn btn-primary w-full" onClick={() => searchMaterial()}>Buscar en sucursales</button>
                         </div>
                     </form>
                 </div>
@@ -67,15 +72,25 @@ export default function GetMaterials() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th>Aceite</th>
-                                    <td>Norte</td>
-                                    <td>50 L</td>
-                                    <td className="flex gap-x-1">
-                                        <input className="input input-bordered w-full" type="number" placeholder="Cantidad" />
-                                        <button className="btn btn-primary"><FaTruck /></button>
-                                    </td>
-                                </tr>
+                                {
+                                    materialsData.map((material, index) => {
+                                        return <tr key={index}>
+                                            <th>{material.nombre_insumo}</th>
+                                            <td>Norte</td>
+                                            <td>{material.cantidad}</td>
+                                            <td className="flex gap-x-1">
+                                                <input
+                                                    value={quantityPeticion}
+                                                    className="input input-bordered w-full"
+                                                    type="number"
+                                                    placeholder="Cantidad"
+                                                    onChange={(e) => setQuantityPeticion(e.target.value)}
+                                                />
+                                                <button className="btn btn-primary"><FaTruck /></button>
+                                            </td>
+                                        </tr>
+                                    })
+                                }
                             </tbody>
                         </table>
                     </div>
