@@ -23,6 +23,23 @@ export default function GetMaterials() {
             })
     }
 
+    const askMaterials = (idMaterial) => {
+        const data = {
+            idMaterial: idMaterial,
+            quantity: quantityPeticion
+        }
+
+        console.log(data)
+
+        axios.post('http://192.168.1.14:4001/inventory/askMaterials', data)
+            .then(function (response) {
+                console.log(response.data)
+            })
+            .catch(function (error) {
+                console.error(error)
+            })
+    }
+
     return (
         <>
             <div>
@@ -86,7 +103,7 @@ export default function GetMaterials() {
                                                     placeholder="Cantidad"
                                                     onChange={(e) => setQuantityPeticion(e.target.value)}
                                                 />
-                                                <button className="btn btn-primary"><FaTruck /></button>
+                                                <button className="btn btn-primary" onClick={() => askMaterials(material.id_insumo)}><FaTruck /></button>
                                             </td>
                                         </tr>
                                     })
