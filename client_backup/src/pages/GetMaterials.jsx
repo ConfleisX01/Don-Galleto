@@ -2,21 +2,37 @@ import { FaBox } from "react-icons/fa";
 import { FaTruck } from "react-icons/fa";
 
 import axios from 'axios'
-import { useState } from "react";
-import { materials } from "../components/config/materials";
+import { useEffect, useState } from "react";
 
 export default function GetMaterials() {
     const [itemSelected, setItemSelected] = useState('')
     const [materialsData, setMaterialsData] = useState([])
     const [quantityPeticion, setQuantityPeticion] = useState(0)
+    const [urlFrom, setUrlFrom] = useState('')
+    const [myMaterialsData, setMyMaterialsData] = useState([])
+
+    const getAllMaterials = () => {
+        axios.get('http://localhost:4001/inventory/getMaterials')
+            .then(function (response) {
+                setMyMaterialsData(response.data)
+                console.log(response.data)
+            })
+            .catch(function (error) {
+                console.error(error)
+            })
+    }
+
+    const setMaterialToSearch = () => {
+        return myMaterialsData[itemSelected - 1].nombre_insumo
+    }
 
     const searchMaterial = () => {
-        axios.get('http://192.168.0.112:4001/inventory/getSearchedMaterials', {
-            params: { material: itemSelected }
+        axios.get('http://localhost:4001/inventory/getSearchedMaterials', {
+            params: { material: setMaterialToSearch() }
         })
             .then(function (response) {
-                console.log(response.data)
                 setMaterialsData(response.data)
+                setUrlFrom(response.url)
             })
             .catch(function (error) {
                 console.error(error)
@@ -29,16 +45,18 @@ export default function GetMaterials() {
             quantity: quantityPeticion
         }
 
-        console.log(data)
-
-        axios.post('http://192.168.0.112:4001/inventory/askMaterials', data)
+        axios.post(urlFrom, data)
             .then(function (response) {
-                console.log(response.data)
+                console.log(response)
             })
             .catch(function (error) {
                 console.error(error)
             })
     }
+
+    useEffect(() => {
+        getAllMaterials()
+    }, [])
 
     return (
         <>
@@ -63,8 +81,8 @@ export default function GetMaterials() {
                                 <select value={itemSelected} onChange={(e) => setItemSelected(e.target.value)} className="select select-bordered">
                                     <option disabled selected>Selecciona uno</option>
                                     {
-                                        materials.map((material, index) => {
-                                            return <option key={index} value={material.name}>{material.name}</option>
+                                        myMaterialsData.map((material, index) => {
+                                            return <option key={index} value={material.id_insumo}>{material.nombre_insumo}</option>
                                         })
                                     }
                                 </select>

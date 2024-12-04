@@ -6,7 +6,9 @@ export async function getMaterialFromApis(materialName, url) {
             params: { material: materialName }
         })
 
-        return response
+        const mappedResponse = {status: response.status, url: url, data: response.data}
+
+        return mappedResponse
     } catch (error) {
         console.error(error)
     }
