@@ -13,7 +13,7 @@ const Dropdown = ({ options, placeholder = "Unidad", onSelect }) => {
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left sticky top-0">
       <button
         id="dropdownHoverButton"
         onClick={toggleDropdown}

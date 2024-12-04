@@ -12,6 +12,7 @@ export default function GetMaterials() {
 
     const searchMaterial = () => {
         axios.get('http://192.168.1.14:4001/inventory/getExternalMaterials', {
+
             params: { material: itemSelected }
         })
             .then(function (response) {

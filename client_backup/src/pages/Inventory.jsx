@@ -1,73 +1,85 @@
+
 import { FaBox } from "react-icons/fa";
-import { FaBell } from "react-icons/fa";
+import { IoWarningOutline } from "react-icons/io5";
 import { RiSearchFill } from "react-icons/ri";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from 'react-toastify'
 import { Link, Navigate } from "react-router-dom";
 
+import axios from 'axios'
 
 export default function Inventory() {
-  const [sectionSelected, setSectionSelected] = useState('Mermas')
+  const [materialsData, setMaterialsData] = useState([])
 
-  const data = [
-    { nombre: 'Harina', fecha: '2024-12-02', cantidad: '30', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-    { nombre: 'Azúcar', fecha: '2024-12-20', cantidad: '15', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-    { nombre: 'Sal', fecha: '2024-11-02', cantidad: '20', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-    { nombre: 'Aceite', fecha: '2024-12-08', cantidad: '10', proveedor: 'PROVEEDOR', unidadMedida: 'L' },
-    { nombre: 'Leche', fecha: '2024-11-02', cantidad: '25', proveedor: 'PROVEEDOR', unidadMedida: 'L' },
-    { nombre: 'Café', fecha: '2024-12-02', cantidad: '5', proveedor: 'PROVEEDOR', unidadMedida: 'KG' },
-  ]
+  const getAllMaterials = () => {
+    axios.get('http://localhost:4001/inventory/getMaterials')
+      .then(function (response) {
+        setMaterialsData(response.data)
+      })
+      .catch(function (error) {
+        console.error(error)
+      })
+  }
+
+  useEffect(() => {
+    getAllMaterials()
+  }, [])
 
   return (
     <>
       <div className="w-full py-4 px-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {
-            data.map((material, index) => {
-              return <Card
-                key={index}
-                nombreMaterial={material.nombre}
-                fechaCaducidad={material.fecha}
-                cantidad={material.cantidad}
-                unidadMedida={material.unidadMedida}
-                proveedor={material.proveedor}
-              />
-            })
+            materialsData
+              .sort((a, b) => new Date(a.caducidad) - new Date(b.caducidad))
+              .map((material, index) => {
+                return <Card
+                  key={index}
+                  nombreMaterial={material.nombre_insumo}
+                  fechaCaducidad={material.caducidad}
+                  cantidad={material.cantidad}
+                  unidadMedida={material.unidad}
+                />
+              })
           }
         </div>
-        <div className="w-full mt-5">
+        <div className="w-full mt-5 flex gap-x-4">
           <button className="btn btn-error">Agregar Merma</button>
+          <Link className="btn btn-info" to={'/system/get_materials'}>Buscar Materiales</Link>
         </div>
       </div>
     </>
   )
 }
 
-function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedor }) {
+function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida }) {
 
-  const calcularDias = () => {
+  const calculateDays = () => {
     const fechaActual = new Date()
     const nuevaFecha = new Date(fechaCaducidad)
 
     const diferenciaTiempo = nuevaFecha - fechaActual
 
-    console.log(Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24)))
-
     return Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24))
+  }
+
+  const calculateMaterialProblems = () => {
+    if (calculateDays() < 0)
+      return <span className="indicator-item indicator-end badge bg-red-300"><RiSearchFill /></span>
+
+    if (calculateDays() < 6)
+      return <span className="indicator-item indicator-end badge badge-warning"><IoWarningOutline /></span>
   }
 
   return (
     <>
-      <div className={`indicator w-full p-2 py-5 border rounded-lg ${calcularDias() < 0 ? 'bg-gray-100' : ''}`}>
+      <div className={`indicator w-full p-2 py-5 border rounded-lg shadow-sm ${calculateDays() < 0 ? 'bg-gray-100' : ''}`}>
         {
-          calcularDias() < 0 ?
-            <span className="indicator-item indicator-end badge bg-red-300"><Link to={'/system/get_materials'} className="font-semibold text-red-600"><RiSearchFill /></Link></span> :
-            calcularDias() < 6 ?
-              <span className="indicator-item indicator-end badge badge-warning"><FaBell /></span> : null
+          calculateMaterialProblems()
         }
         <div className="flex w-full">
-          <div className={calcularDias() < 0 ? 'hidden' : 'flex flex-col'}>
+          <div className={calculateDays() < 0 ? 'hidden' : 'flex flex-col'}>
             <div className="radial-progress text-primary" style={{ "--value": cantidad }} role="progressbar">
               <FaBox />
             </div>
@@ -77,20 +89,20 @@ function Card({ nombreMaterial, fechaCaducidad, cantidad, unidadMedida, proveedo
             <h2 className="font-bold text-lg">{nombreMaterial}</h2>
             <p className="font-semibold text-gray-600">Fecha de caducidad:</p>
             {(() => {
-              const diasRestantes = Math.ceil(Math.abs(calcularDias()))
+              const diasRestantes = Math.ceil(Math.abs(calculateDays()))
               const mensaje =
-                calcularDias() < 0
+                calculateDays() < 0
                   ? `Caducado hace ${diasRestantes} días`
-                  : calcularDias() == 0
+                  : calculateDays() == 0
                     ? "Caduca hoy"
-                    : calcularDias() <= 6
+                    : calculateDays() <= 6
                       ? `Caduca en ${diasRestantes} días`
                       : `Caduca en ${diasRestantes} días`;
 
               const claseTexto =
-                calcularDias() < 0
+                calculateDays() < 0
                   ? "text-red-600 font-medium"
-                  : calcularDias() <= 6
+                  : calculateDays() <= 6
                     ? "text-yellow-300 font-medium"
                     : "text-green-600 font-medium";
 

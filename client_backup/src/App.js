@@ -53,7 +53,7 @@ function App() {
           element: <Production />
         },
         {
-          path: '/system/Mermas',
+          path: '/system/mermas',
           element: <Mermas />
         },
         {
