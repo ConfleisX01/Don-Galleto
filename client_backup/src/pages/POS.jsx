@@ -1,6 +1,7 @@
 import { FaCookieBite, FaBalanceScale, FaDollarSign, FaTrashAlt, FaCartPlus } from "react-icons/fa";
 import { BsCartXFill } from "react-icons/bs";
 import { BiPackage } from "react-icons/bi";
+import { GiArchiveRegister } from "react-icons/gi";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -8,13 +9,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Pos() {
     const [total, setTotal] = useState(0)
+    const [isModalOpenSales, setIsModalOpenSales] = useState(false);
     const [isModalOpenGramos, setIsModalOpenGramos] = useState(false);
     const [isModalOpenDinero, setIsModalOpenDinero] = useState(false);
     const [isModalOpenUnidad, setIsModalOpenUnidad] = useState(false);
     const [isModalOpenPaquetes, setIsModalOpenPaquetes] = useState(false);
     const [cookies, setCookies] = useState([]);
+    const [sales, setSales] = useState([]);
     const [selectedCookie, setSelectedCookie] = useState(null);
-    const [cantidad, setCantidad] = useState('');
     const [cart, setCart] = useState([]);
     let i = 0;
     const addToCart = (cookieData) => {
@@ -22,13 +24,16 @@ export default function Pos() {
     };
 
     useEffect(() => {
-        console.log(cart)
         sumarCantidad()
     }, [cart])
 
     const showModalSaleGramos = async () => {
         await getAllCookies();
         setIsModalOpenGramos(!isModalOpenGramos);
+    }
+    const showModalSales = async () => {
+        await getAllSales();
+        setIsModalOpenSales(!isModalOpenSales);
     }
     const showModalSaleDinero = async () => {
         await getAllCookies();
@@ -60,7 +65,7 @@ export default function Pos() {
             } else if (item.type === "d") {
                 newTotal += parseFloat(item.cantidad);
             } else if (item.type === "p") {
-                newTotal += 1000 * (item.cantidad / 37);
+                newTotal += item.cantidad * (1000 / 37);
             } else if (item.type === "u") {
                 newTotal += parseInt(item.cantidad * item.cookiePrice);
             }
@@ -72,6 +77,15 @@ export default function Pos() {
         try {
             const response = await axios.get('http://localhost:4001/pos/getAllCookies');
             setCookies(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getAllSales = async () => {
+        try {
+            const response = await axios.get('http://localhost:4001/pos/getAllSales');
+            setSales(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -143,21 +157,28 @@ export default function Pos() {
                             </div>
 
                         </div>
-                        <div className="flex">
+                        <div className="flex border-t">
                             <div className="p-2 flex-1 border-r items-center flex flex-col">
                                 <p>Eliminar carrito</p>
-                                <div className="flex aling-center items-center btn btn-error my-3">
+                                <div className="flex aling-center items-center btn btn-error my-3" onClick={deleteCart}>
                                     <BsCartXFill />
-                                    <button onClick={deleteCart}>Eliminar</button>
+                                    <p>Eliminar</p>
                                 </div>
                             </div>
-                            <div className="p-2 flex-1 items-center flex flex-col">
+                            <div className="p-2 flex-1 border-r items-center flex flex-col">
                                 <p>Total:
                                     {total}
                                 </p>
-                                <div className="flex aling-center items-center btn btn-primary my-3">
+                                <div className="flex aling-center items-center btn btn-primary my-3" onClick={doSale}>
                                     <FaCartPlus />
-                                    <button onClick={doSale}>Registrar</button>
+                                    <p>Registrar</p>
+                                </div>
+                            </div>
+                            <div className="p-2 flex-1 items-center flex flex-col">
+                                <p>Ver Ventas</p>
+                                <div className="flex aling-center items-center btn btn-primary my-3" onClick={showModalSales}>
+                                    <GiArchiveRegister />
+                                    <p>Mostrar</p>
                                 </div>
                             </div>
                         </div>
@@ -167,6 +188,7 @@ export default function Pos() {
                 {isModalOpenDinero && <ModalSale type={"d"} cookies={cookies} onClick={showModalSaleDinero} onCookieSelect={handleCookieSelection} addToCart={addToCart} />}
                 {isModalOpenUnidad && <ModalSale type={"u"} cookies={cookies} onClick={showModalSaleUnidad} onCookieSelect={handleCookieSelection} addToCart={addToCart} />}
                 {isModalOpenPaquetes && <ModalSale type={"p"} cookies={cookies} onClick={showModalSalePaquetes} onCookieSelect={handleCookieSelection} addToCart={addToCart} />}
+                {isModalOpenSales && <ModalSales sales={sales} onClick={showModalSales} />}
             </div>
         </>
     );
@@ -290,7 +312,6 @@ function ModalSale({ type, cookies, onClick, onCookieSelect, addToCart }) {
                                         value={cantidad}
                                         onChange={(e) => setCantidad(e.target.value)}
                                     />
-
                                 </div>
                             </div>
                         </div>
@@ -315,6 +336,99 @@ function ModalSale({ type, cookies, onClick, onCookieSelect, addToCart }) {
     );
 }
 
+function ModalSales({ sales, onClick }) {
+    const [sales2, setSales2] = useState([]);
+    const [isModalOpenCookies, setIsModalOpenCookies] = useState(false);
+    const showModalCookies = () => {
+        setIsModalOpenCookies(!isModalOpenCookies);
+    }
+    const showDetails = (idVenta) => {
+        getAllSales(idVenta);
+        console.log(sales2);
+        showModalCookies();
+    };
+    const getAllSales = async (idVenta) => {
+        try {
+            axios.post('http://localhost:4001/pos/getAllSalesDetails', {
+                idVenta
+            }).then(function (response) {
+                setSales2(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="flex-col bg-white border grid rounded-lg p-8 shadow-lg w-2/3 text-center sm:flex h-3/4 lg:w-2/4">
+                <table className="table-auto">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Fecha</th>
+                            <th>estatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            sales.map((sale, index) => {
+                                return (
+                                    <tr key={index} className="cursor-pointer hover:bg-indigo-50" onClick={() => showDetails(sale.id_venta)}>
+                                        <td>{sale.id_venta}</td>
+                                        <td>{sale.fecha_venta}</td>
+                                        <td>{sale.estatus_venta === 1 ? "Activa" : "Inactiva"}</td>
+                                    </tr>
+                                );
+                            })
+                        }
+                    </tbody>
+                </table>
+                <div className="flex aling-center items-center btn btn-primary my-3" onClick={onClick}>
+                    <BsCartXFill />
+                    <button>Cerrar</button>
+                </div>
+                {isModalOpenCookies && <ModalCookies cookies={sales2} onClick={showModalCookies} />}
+            </div>
+        </div>
+    );
+}
+
+function ModalCookies({ cookies, onClick }) {
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="flex-col bg-white border grid rounded-lg p-8 shadow-lg w-2/3 text-center sm:flex h-3/4 lg:w-2/4">
+                <table className="table-auto">
+                    <thead>
+                        <tr>
+                            <th>Galleta</th>
+                            <th>Cantidad</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            cookies.map((cookie, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{cookie.nombre_galleta}</td>
+                                        <td>{cookie.cantidad}</td>
+                                        <td>{cookie.tipo_cantidad === "g" ? "Gramos" : cookie.tipo_cantidad === "u" ? "Unidad" : cookie.tipo_cantidad === "p" ? "Paquete" : "Dinero"}</td>
+                                    </tr>
+                                );
+                            })
+                        }
+                    </tbody>
+                </table>
+                <div className="flex aling-center items-center btn btn-primary my-3" onClick={onClick}>
+                    <BsCartXFill />
+                    <button>Cerrar</button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 function ContainerBtn({ icon, text, onClick }) {
     return (
