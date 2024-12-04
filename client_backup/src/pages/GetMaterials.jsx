@@ -11,7 +11,8 @@ export default function GetMaterials() {
     const [quantityPeticion, setQuantityPeticion] = useState(0)
 
     const searchMaterial = () => {
-        axios.get('http://192.168.0.112:4001/inventory/getSearchedMaterials', {
+        axios.get('http://192.168.1.14:4001/inventory/getExternalMaterials', {
+
             params: { material: itemSelected }
         })
             .then(function (response) {
@@ -31,7 +32,7 @@ export default function GetMaterials() {
 
         console.log(data)
 
-        axios.post('http://192.168.0.112:4001/inventory/askMaterials', data)
+        axios.post('http://192.168.1.14:4001/inventory/askMaterials', data)
             .then(function (response) {
                 console.log(response.data)
             })
