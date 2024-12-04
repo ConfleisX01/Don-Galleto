@@ -1,8 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import { SERVER_PORT } from './config.js'
+
 import { insertSale, deleteCookiesFromSale, getAllSales, getAllCookies, getAllSalesDetails } from "./pos/daoPos.js";
 import { validarInsertCookiesSale } from "./pos/cqrsPos.js";
+
+
+import ControllerInventory from './inventory/Controller/InventoryController.js'
 
 
 const app = express()
@@ -14,6 +18,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }))
+
 
 /* Inicio seccion ventas (Luis García) */
 
@@ -61,6 +66,7 @@ app.post('/pos/insertSale', async (req, res) => {
 });
 
 /* Final seccion ventas (Luis García) */
+app.use('/inventory', ControllerInventory)
 
 app.listen(SERVER_PORT, () => {
     console.log('http://localhost:' + SERVER_PORT)

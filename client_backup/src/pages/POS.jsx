@@ -4,7 +4,7 @@ import { BiPackage } from "react-icons/bi";
 import { GiArchiveRegister } from "react-icons/gi";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Pos() {
