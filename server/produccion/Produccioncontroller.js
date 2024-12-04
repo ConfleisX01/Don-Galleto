@@ -70,9 +70,7 @@ produccionController.post('/next-step', async (req, res) => {
 });
 
 produccionController.post('/marcar-merma', async (req, res) =>{
-    const data = req.body;
-
-
+    const data = req.body;1
     try {
         const response = await verifyMerma(data);
         res.status(200).json({
