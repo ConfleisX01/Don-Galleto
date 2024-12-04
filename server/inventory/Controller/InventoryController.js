@@ -5,6 +5,7 @@ import { getMaterialFromApis } from '../DDD/InventoryDDD.js'
 
 const ControllerInventory = express.Router()
 
+// Funcion para buscar los materiales en las demas sucursales
 ControllerInventory.get('/getSearchedMaterials', async (req, res) => {
     const materialName = req.query.material
 
@@ -16,31 +17,20 @@ ControllerInventory.get('/getSearchedMaterials', async (req, res) => {
     }
 });
 
-
+// Funcion para obtener los materiales de la base de datos local
 ControllerInventory.get('/getMaterialsFromBase', async (req, res) => {
-    const materialName = req.query.material;
-
-    if (!materialName || materialName.length < 1) {
-        return res.status(400).send('El nombre del material no puede estar vacío');
-    }
+    const materialName = req.query.material
 
     try {
-        const response = await getAllMaterialsFromBase(materialName);
-
-        // Si no se encuentran materiales, devolvemos un 404
-        if (response.status === 404) {
-            return res.status(404).send(response.data);
-        }
-
-        // Si todo es correcto, devolvemos los materiales encontrados
-        return res.status(response.status).send(response.data);
+        const response = await getAllMaterialsFromBase(materialName)
+        res.status(response.status).send(response.data)
     } catch (error) {
-        console.error('Error al obtener materiales desde la base de datos:', error);
-        return res.status(500).send('Error de servidor, intentelo nuevamente');
+        console.error(error)
+        res.status(500).send('Error de servidor, intentelo nuevamente')
     }
-});
+})
 
-
+// Funcion para obtener todos los materiales de la base de datos local
 ControllerInventory.get('/getMaterials', async (req, res) => {
     try {
         const response = await getAllMaterials()
@@ -51,14 +41,15 @@ ControllerInventory.get('/getMaterials', async (req, res) => {
     }
 })
 
+// Funcion para pedir los materiales
 ControllerInventory.post('/askMaterials', async (req, res) => {
     const { idMaterial, quantity } = req.body
 
     try {
-        const response = await verifyAskForMaterials(idMaterial, quantity)
+        const response = await verifyAskForMaterials(idMaterial, quantity) // Verificamos las entradas del material
 
         if (response.status === 200) {
-            const inventoryResponse = await updateMaterialQuantity(idMaterial, quantity)
+            const inventoryResponse = await updateMaterialQuantity(idMaterial, quantity) // Actualizamos a la nueva cantidad del material dado de manera local
             res.status(inventoryResponse.status).send(inventoryResponse.data)
         }
 
