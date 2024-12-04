@@ -1,6 +1,6 @@
 import express from 'express'
 import { getAllMaterials, getAllMaterialsFromBase, updateMaterialQuantity } from '../DAO/InventoryDAO.js'
-import { verifyAskForMaterials } from '../CQRS/InventoryCQRS.js'
+import { verifyAskForMaterials, verifyUpdateMaterial } from '../CQRS/InventoryCQRS.js'
 import { getMaterialFromApis } from '../DDD/InventoryDDD.js'
 
 const ControllerInventory = express.Router()
@@ -10,7 +10,7 @@ ControllerInventory.get('/getSearchedMaterials', async (req, res) => {
     const materialName = req.query.material
 
     const apis = [
-        'http://192.168.0.112:4001/inventory/getMaterialsFromBase'
+        'https://27mbkpbq-4001.usw3.devtunnels.ms/inventory/getMaterialsFromBase'
     ]
 
     try {
@@ -18,6 +18,7 @@ ControllerInventory.get('/getSearchedMaterials', async (req, res) => {
         res.status(materialsFromNorth.status).send(materialsFromNorth.data)
     } catch (error) {
         console.error(error)
+        res.status(500).send('Error de servidor, intentelo nuevamente')
     }
 })
 
@@ -51,12 +52,19 @@ ControllerInventory.post('/askMaterials', async (req, res) => {
 
     try {
         const response = await verifyAskForMaterials(idMaterial, quantity) // Verificamos las entradas del material
+        res.status(response.status).send(response.data)
+    } catch (error) {
+        console.error(error)
+        res.status(500).send('Error de servidor, intentelo nuevamente')
+    }
+})
 
-        if (response.status === 200) {
-            const inventoryResponse = await updateMaterialQuantity(idMaterial, quantity) // Actualizamos a la nueva cantidad del material dado de manera local
-            res.status(inventoryResponse.status).send(inventoryResponse.data)
-        }
+// Funcion para actualizar la cantidad de un insumo en el inventario
+ControllerInventory.post('/updateMaterialQuantity', async (req, res) => {
+    const { idMaterial, quantity } = req.body
 
+    try {
+        const response = await verifyUpdateMaterial(idMaterial, quantity)
         res.status(response.status).send(response.data)
     } catch (error) {
         console.error(error)
