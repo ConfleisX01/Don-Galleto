@@ -9,7 +9,22 @@ const db = mysql.createConnection({
 
 export function getAllSales() {
     return new Promise((resolve, reject)=>{
-        db.query('SELECT * FROM vista_ventas_detalle',
+        db.query('SELECT * FROM ventas',
+            (err, result) => {
+                if (err){
+                    reject(err)
+                }else{
+                    resolve(result)
+                }
+            }
+        )
+    })
+}
+
+export function getAllSalesDetails(idVenta) {
+    return new Promise((resolve, reject)=>{
+        db.query('SELECT * FROM vista_ventas_detalle WHERE id_venta = ?',
+            [idVenta],
             (err, result) => {
                 if (err){
                     reject(err)

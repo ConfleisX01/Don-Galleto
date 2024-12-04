@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { SERVER_PORT } from './config.js'
-import { insertSale, deleteCookiesFromSale, getAllSales, getAllCookies } from "./pos/daoPos.js";
+import { insertSale, deleteCookiesFromSale, getAllSales, getAllCookies, getAllSalesDetails } from "./pos/daoPos.js";
 import { validarInsertCookiesSale } from "./pos/cqrsPos.js";
 
 
@@ -26,6 +26,16 @@ app.get('/pos/getAllSales', async (req, res) => {
     }
 })
 
+app.post('/pos/getAllSalesDetails', async (req, res) => {
+    const idVenta = req.body;
+    try {
+        const respuesta = await getAllSalesDetails(idVenta.idVenta);
+        res.send(respuesta);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 app.get('/pos/getAllCookies', async (req, res) => {
     try {
         const respuesta = await getAllCookies();
@@ -42,7 +52,7 @@ app.post('/pos/insertSale', async (req, res) => {
         const idVenta = await insertSale();
         for (const galleta of galletas) {
             respuesta = await validarInsertCookiesSale(galleta.cookieId, idVenta[0][0].idVenta, galleta.cantidad, galleta.type)
-            await deleteCookiesFromSale(galleta.idGalleta, galleta.cantidad)
+            await deleteCookiesFromSale(idVenta[0][0].idVenta, galleta.cantidad)
         }
         res.send(respuesta);
     } catch (error) {
