@@ -1,4 +1,4 @@
-import { iniciarProcesoDAO, nextStep, marcarMerma } from './DAOProduccion.js';
+import { iniciarProcesoDAO, nextStep, marcarMerma } from '../DAO/DAOProduccion.js';
 
 export async function verifiProcedure(data) {
     // Validación del tipo de datos y rango
