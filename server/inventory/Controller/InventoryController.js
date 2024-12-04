@@ -9,13 +9,17 @@ const ControllerInventory = express.Router()
 ControllerInventory.get('/getSearchedMaterials', async (req, res) => {
     const materialName = req.query.material
 
+    const apis = [
+        'http://192.168.0.112:4001/inventory/getMaterialsFromBase'
+    ]
+
     try {
-        const materialsFromNorth = await getMaterialFromApis(materialName, 'http://192.168.0.112:4001/inventory/getMaterialsFromBase')
-        console.log(materialsFromNorth)
+        const materialsFromNorth = await getMaterialFromApis(materialName, apis[0])
+        res.status(materialsFromNorth.status).send(materialsFromNorth.data)
     } catch (error) {
         console.error(error)
     }
-});
+})
 
 // Funcion para obtener los materiales de la base de datos local
 ControllerInventory.get('/getMaterialsFromBase', async (req, res) => {
