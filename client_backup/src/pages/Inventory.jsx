@@ -46,7 +46,7 @@ export default function Inventory() {
         </div>
         <div className="w-full mt-5 flex gap-x-4">
           <button className="btn btn-error">Agregar Merma</button>
-          <Link className="btn btn-info" to={'/system/get_materials'}>Buscar Materiales</Link>
+          <Link className="btn btn-info" to={'/system/get_materials'}>Buscar Materiales "PRUEBA PARA CONEXION TEAMS IGNORAR ESTO"</Link>
         </div>
       </div>
     </>
