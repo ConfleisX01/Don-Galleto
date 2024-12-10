@@ -22,7 +22,7 @@ export default function Reports() {
 
                 <div className="p-2 shadow border col-span-1 rounded">
                     <div className="p-2">
-                        <h2 className="font-medium text-center text-2xl">Gastos y Ganancia por Día</h2>
+                        <h2 className="font-medium text-center text-2xl">Gastos y Ganancia por Día semana</h2>
                     </div>
                     <BarChart />
                 </div>
